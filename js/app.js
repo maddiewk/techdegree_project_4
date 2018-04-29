@@ -24,20 +24,22 @@
     playerOne.className += " active";
   }
 
-// highlight current player's symbol when mouse hovers over squares
-    for (let i = 0; i < boxes.length; i ++) {
-      boxes[i].addEventListener("mouseenter", (event) => {
-        boxes[i].className += " box-1";
-      });
-  }
-
-  // when a box is clicked, add current player's symbol inside the box
+  // players trade turns
+  // each time a square is clicked, it becomes disabled
   ul.addEventListener("click", (event) => {
-      if (playerOne.classList.contains("active")) {
-        event.target.className += " box-filled-1";
-      } else if (playerTwo.classList.contains("active")) {
-        event.target.className += " box-filled-2";
-      }
-    });
+    console.log(event.target);
+    if (playerOne.classList.contains("active")) {
+      playerTwo.className += " active";
+      playerOne.className = "players";
+      event.target.className += " box-filled-1 disabled";
+    } else if (playerTwo.classList.contains("active")) {
+      playerOne.className += " active";
+      playerTwo.className = "players";
+      event.target.className += " box-filled-2 disabled";
+    }
+  });
+
+  // highlight current player's symbol when mouse hovers over squares
+
 
 } ();

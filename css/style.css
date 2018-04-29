@@ -129,12 +129,15 @@ h1 {
     background-size: 100px 100px;
     background-repeat: no-repeat;
     background-position: center center;}
-    /*new hover classes */
+    /*new classes */
+    .disabled {
+      pointer-events: none;
+    }
     .boxes .box-1:hover {
       background-image: url(../img/o.svg);
     }
     .boxes .box-2:hover {
-      background-image: url(../img/x.svg); 
+      background-image: url(../img/x.svg);
     }
     .boxes .box:nth-child(3n) {
       margin-right: 0; }

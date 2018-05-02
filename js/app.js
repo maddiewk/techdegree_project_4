@@ -26,8 +26,8 @@
 
   // players trade turns
   // each time a square is clicked, it becomes disabled
+
   ul.addEventListener("click", (event) => {
-    console.log(event.target);
     if (playerOne.classList.contains("active")) {
       playerTwo.className += " active";
       playerOne.className = "players";
@@ -39,7 +39,14 @@
     }
   });
 
-  // highlight current player's symbol when mouse hovers over squares
+  // highlight current player's symbol when mouse hovers over squares?
 
+$(".box").hover(function(event) {
+  console.log("Working");
+  $(this).addClass(" box-1");
+}, function(event) {
+  console.log("Removing");
+  $(this).removeClass(" box-1");
+});
 
 } ();

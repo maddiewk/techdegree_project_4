@@ -13,7 +13,7 @@
   const boxes = document.querySelectorAll(".box");
 
   board.style.display = "none";
-  finish.style.display = "none";
+  win.style.display = "none";
 
   // when the button is clicked, display the game board
   startButton.onclick = function() {
@@ -39,14 +39,15 @@
     }
   });
 
-  // highlight current player's symbol when mouse hovers over squares?
+  // highlight current player's symbol when mouse hovers over squares
 
 $(".box").hover(function(event) {
-  console.log("Working");
-  $(this).addClass(" box-1");
-}, function(event) {
-  console.log("Removing");
-  $(this).removeClass(" box-1");
+  if (playerOne.classList.contains("active")) {
+  $(this).addClass(" box-1").removeClass(" box-2");
+}
+if (playerTwo.classList.contains("active")) {
+  $(this).addClass(" box-2").removeClass(" box-1");
+}
 });
 
 } ();

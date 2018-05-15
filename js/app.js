@@ -3,6 +3,7 @@
   // HTML variables
   const start = document.getElementById("start");
   const board = document.getElementById("board");
+  const title = document.getElementById("tictactoe");
   const win = document.getElementById("finish");
   const startButton = document.querySelector(".button");
   const playerOne = document.getElementById("player1");
@@ -22,6 +23,8 @@
     [boxes[0], boxes[4], boxes[8]],
     [boxes[6], boxes[4], boxes[2]]
   ];
+
+
 // arrays to hold each player's moves
 let playerOneMoves = [];
 let playerTwoMoves = [];
@@ -29,6 +32,7 @@ let playerTwoMoves = [];
   // hide game board and show start screen
   board.style.display = "none";
   win.style.display = "none";
+  $("#player1name").focus();
 
   // when the start button is clicked, display the game board
   startButton.onclick = function() {
@@ -56,20 +60,35 @@ let playerTwoMoves = [];
   });
 
   // highlight current player's symbol when mouse hovers over squares
-$(".box").hover(function(event) {
-  if (playerOne.classList.contains("active")) {
-  $(this).addClass(" box-1").remove(" box-2");
-}
-if (playerTwo.classList.contains("active")) {
-  $(this).addClass(" box-2").removeClass(" box-1");
-}
-});
+ul.onmouseover = (event) => {
+  if (event.target.className === "box box-filled-1 disabled" || event.target.className === "box box-filled-2 disabled") {
+    return;
+  }
+  if (playerOne.className === "players active") {
+    event.target.style.backgroundImage = 'url("./img/o.svg")';
+  } else {
+    event.target.style.backgroundImage = 'url("./img/x.svg")';
+  }
+};
+
+ul.onmouseout = (event) => {
+  if (event.target.className === "box box-filled-1 disabled" || event.target.className === "box box-filled-2 disabled") {
+    return;
+  }
+  if (playerOne.className === "players active") {
+    event.target.style.backgroundImage = "";
+  } else {
+    event.target.style.backgroundImage = "";
+  }
+};
+
 
 
 // add programming for win, lose, or draw
 // const winGame = (winCombinations, checkedBoxes) => {
 //   for (let i = 0; i < winCombinations.length; i++) {
 //     if (winCombinations[i].every(move => checkedBoxes.indexOf(move) != -1)) {
+//       console.log("Win combination achieved");
 //       return true;
 //     }
 //     return false;
@@ -77,24 +96,19 @@ if (playerTwo.classList.contains("active")) {
 //   }
 
 // show winner
-// const showWinner = (playerMoves) => {
+// const showWinner = (player, playerMoves) => {
 //   if (winGame(winCombinations, playerOneMoves) === true) {
 //     board.style.display = "none";
 //     win.style.display = "";
-//     message.innerHTML = "Congratulations! You won!";
+//     message.textContent = "Player 1 wins!";
 //   } else if (winGame(winCombinations, playerTwoMoves) === true) {
 //     board.style.display = "none";
 //     win.style.display = "";
-//     message.innerHTML = "You lost!";
+//     message.textContent = "Player 2 wins!";
 //   }
 // }
+//
 
-// const showTie = (selectedBoxes) => {
-//   if ((selectedBoxes.length === 5) && (board.style.display === "block")) {
-//     board.style.display = "none";
-//     win.style.display = "";
-//     message.innerHTML = "It's a tie";
-//   }
-// }
+
 
 } ();

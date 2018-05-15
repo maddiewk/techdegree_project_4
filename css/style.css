@@ -130,6 +130,13 @@ h1 {
     background-repeat: no-repeat;
     background-position: center center;}
     /*new classes */
+    #player1name {
+      margin-top: 25px;
+      margin-bottom: 35px;
+      margin-right: 55px;
+    }
+
+
     .disabled {
       pointer-events: none;
     }

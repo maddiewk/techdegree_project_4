@@ -10,7 +10,7 @@
   const playerTwo = document.getElementById("player2");
   const ul = document.querySelector(".boxes");
   let boxes = document.querySelectorAll(".box");
-  const message = document.querySelector(".message");
+  let message = document.querySelector(".message");
 
 // array to hold all possible winning combinations
   let winCombinations = [
@@ -21,7 +21,7 @@
     [boxes[1], boxes[4], boxes[7]],
     [boxes[2], boxes[5], boxes[8]],
     [boxes[0], boxes[4], boxes[8]],
-    [boxes[6], boxes[4], boxes[2]]
+    [boxes[2], boxes[4], boxes[6]]
   ];
 
 
@@ -32,13 +32,20 @@ let playerTwoMoves = [];
   // hide game board and show start screen
   board.style.display = "none";
   win.style.display = "none";
+
+  // user input
   $("#player1name").focus();
 
-  // when the start button is clicked, display the game board
+  function getName(event) {
+    let inputValue = document.getElementById("player1name").value;
+    $("#player1").append(inputValue);
+    $("#player2").append("Player Two");
+  }
+  // when the start button is clicked, display the game board and player one's name
   startButton.onclick = function() {
     board.style.display = "";
     start.style.display = "none";
-
+    getName();
   // automatically set first player to O
     playerOne.className += " active";
   }
@@ -46,18 +53,29 @@ let playerTwoMoves = [];
   // players trade turns
   // each time a square is clicked, it becomes disabled
   ul.addEventListener("click", (event) => {
-    if (playerOne.classList.contains("active")) {
-      playerTwo.className += " active";
-      playerOne.className = "players";
-      event.target.className += " box-filled-1 disabled";
+    if (playerOne.classList.contains("active") && event.target.className === "box") {
+      playerTwo.classList.add("active");
+      playerOne.classList.remove("active");
+      event.target.classList.add("box-filled-1");
+      event.target.classList.add("disabled");
       playerOneMoves.push(event.target);
-    } else if (playerTwo.classList.contains("active")) {
-      playerOne.className += " active";
-      playerTwo.className = "players";
-      event.target.className += " box-filled-2 disabled";
+      showWinner(playerTwo, playerOneMoves);
+    } else  if (playerTwo.classList.contains("active")) {
+      playerOne.classList.add("active");
+      playerTwo.classList.remove("active");
+      event.target.classList.add("box-filled-2");
+      event.target.classList.add("disabled");
       playerTwoMoves.push(event.target);
+      showWinner(playerOne, playerTwoMoves);
     }
   });
+
+
+
+
+
+
+
 
   // highlight current player's symbol when mouse hovers over squares
 ul.onmouseover = (event) => {
@@ -85,29 +103,29 @@ ul.onmouseout = (event) => {
 
 
 // add programming for win, lose, or draw
-// const winGame = (winCombinations, checkedBoxes) => {
-//   for (let i = 0; i < winCombinations.length; i++) {
-//     if (winCombinations[i].every(move => checkedBoxes.indexOf(move) != -1)) {
-//       console.log("Win combination achieved");
-//       return true;
-//     }
-//     return false;
-//     }
-//   }
+const winGame = (winCombinations, checkedBoxes) => {
+  for (let i = 0; i < winCombinations.length; i++) {
+    if (winCombinations[i].every(move => checkedBoxes.indexOf(move) != -1)) {
+      console.log("Win combination achieved");
+      return true;
+    }
+    return false;
+    }
+  }
 
 // show winner
-// const showWinner = (player, playerMoves) => {
-//   if (winGame(winCombinations, playerOneMoves) === true) {
-//     board.style.display = "none";
-//     win.style.display = "";
-//     message.textContent = "Player 1 wins!";
-//   } else if (winGame(winCombinations, playerTwoMoves) === true) {
-//     board.style.display = "none";
-//     win.style.display = "";
-//     message.textContent = "Player 2 wins!";
-//   }
-// }
-//
+const showWinner = (player, playerMoves) => {
+  if (winGame(winCombinations, playerOneMoves) === true) {
+    board.style.display = "none";
+    win.style.display = "";
+    message.textContent = "Player 1 wins!";
+  } else if (winGame(winCombinations, playerTwoMoves) === true) {
+    board.style.display = "none";
+    win.style.display = "";
+    message.textContent = "Player 2 wins!";
+  }
+}
+
 
 
 

@@ -26,8 +26,8 @@
 
 
 // arrays to hold each player's moves
-let playerOneMoves = [];
-let playerTwoMoves = [];
+// let playerOneMoves = [];
+// let playerTwoMoves = [];
 
   // hide game board and show start screen
   board.style.display = "none";
@@ -59,23 +59,14 @@ let playerTwoMoves = [];
       event.target.classList.add("box-filled-1");
       event.target.classList.add("disabled");
       playerOneMoves.push(event.target);
-      showWinner(playerTwo, playerOneMoves);
     } else  if (playerTwo.classList.contains("active")) {
       playerOne.classList.add("active");
       playerTwo.classList.remove("active");
       event.target.classList.add("box-filled-2");
       event.target.classList.add("disabled");
       playerTwoMoves.push(event.target);
-      showWinner(playerOne, playerTwoMoves);
     }
   });
-
-
-
-
-
-
-
 
   // highlight current player's symbol when mouse hovers over squares
 ul.onmouseover = (event) => {
@@ -102,29 +93,108 @@ ul.onmouseout = (event) => {
 
 
 
-// add programming for win, lose, or draw
-const winGame = (winCombinations, checkedBoxes) => {
-  for (let i = 0; i < winCombinations.length; i++) {
-    if (winCombinations[i].every(move => checkedBoxes.indexOf(move) != -1)) {
-      console.log("Win combination achieved");
-      return true;
-    }
-    return false;
-    }
-  }
 
-// show winner
-const showWinner = (player, playerMoves) => {
-  if (winGame(winCombinations, playerOneMoves) === true) {
+
+// different strategy for win, lose, or tie
+
+// let winner = [];
+//
+// function decideWinner() {
+//   winner.push([0,1,2]);
+//   winner.push([3,4,5]);
+//   winner.push([6,7,8]);
+//   winner.push([0,3,6]);
+//   winner.push([1,4,7]);
+//   winner.push([2,5,8]);
+//   winner.push([0,4,8]);
+//   winner.push([2,4,6]);
+// }
+
+let playerOneMoves = [];
+let playerTwoMoves = [];
+let size = 3;
+
+
+function calculate() {
+  let isWin = checkForWinner();
+  if (isWin) {
     board.style.display = "none";
     win.style.display = "";
-    message.textContent = "Player 1 wins!";
-  } else if (winGame(winCombinations, playerTwoMoves) === true) {
-    board.style.display = "none";
-    win.style.display = "";
-    message.textContent = "Player 2 wins!";
   }
 }
+
+
+function checkForWinner() {
+  let win = false;
+  let playerSelections = [];
+
+  if (playerOne.classList.contains("active")) {
+    playerSelections = playerOneMoves;
+  } else {
+    playerSelections = playerTwoMoves;
+  }
+  if (playerSelections.length === size) {
+    for (let i = 0; i < winCombinations.length; i++) {
+      let sets = winCombinations[i];
+      let setFound = true;
+    }
+    for (let j = 0; j < sets.length; j++) {
+      let found = false;
+    }
+    for (let k = 0; k < playerSelections.length; k++) {
+      if (sets[j] === playerSelections[k]) {
+        found = true;
+        break;
+      }
+    }
+    if (setFound == true) {
+      win = true;
+      break;
+    }
+  }
+  return win;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// add programming for win, lose, or draw
+// const winGame = (winCombinations, checkedBoxes) => {
+//   for (let i = 0; i < winCombinations.length; i++) {
+//     if (winCombinations[i].every(move => checkedBoxes.indexOf(move) != -1)) {
+//       return true;
+//     }
+//     return false;
+//     }
+//   }
+//
+// // show winner
+// const showWinner = (player, playerMoves) => {
+//   if (winGame(winCombinations, playerOneMoves) === true) {
+//     board.style.display = "none";
+//     win.style.display = "";
+//     message.textContent = "Player 1 wins!";
+//   } else if (winGame(winCombinations, playerTwoMoves) === true) {
+//     board.style.display = "none";
+//     win.style.display = "";
+//     message.textContent = "Player 2 wins!";
+//   }
+// }
 
 
 

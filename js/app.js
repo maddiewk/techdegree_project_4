@@ -10,24 +10,7 @@
   const playerTwo = document.getElementById("player2");
   const ul = document.querySelector(".boxes");
   let boxes = document.querySelectorAll(".box");
-  let message = document.querySelector(".message");
-
-// array to hold all possible winning combinations
-  let winCombinations = [
-    [boxes[0], boxes[1], boxes[2]],
-    [boxes[3], boxes[4], boxes[5]],
-    [boxes[6], boxes[7], boxes[8]],
-    [boxes[0], boxes[3], boxes[6]],
-    [boxes[1], boxes[4], boxes[7]],
-    [boxes[2], boxes[5], boxes[8]],
-    [boxes[0], boxes[4], boxes[8]],
-    [boxes[2], boxes[4], boxes[6]]
-  ];
-
-
-// arrays to hold each player's moves
-let playerOneMoves = [];
-let playerTwoMoves = [];
+  let playCounter = 0;
 
   // hide game board and show start screen
   board.style.display = "none";
@@ -59,18 +42,21 @@ function takeTurn(event) {
     playerOne.classList.remove("active");
     event.target.classList.add("box-filled-1");
     event.target.classList.add("disabled");
-    playerOneMoves.push(event.target);
   } else  if (playerTwo.classList.contains("active")) {
     playerOne.classList.add("active");
     playerTwo.classList.remove("active");
     event.target.classList.add("box-filled-2");
     event.target.classList.add("disabled");
-    playerTwoMoves.push(event.target);
   }
 }
 
-ul.addEventListener("click", takeTurn);
-$(".box").on("change", calculate);
+$(".boxes").on("click", takeTurn);
+
+//another click handler?
+$(".boxes").on("click", function() {
+  let gameWon = checkForWinner();
+  gameOver(gameWon);
+})
 
   // highlight current player's symbol when mouse hovers over squares
 ul.onmouseover = (event) => {
@@ -96,48 +82,87 @@ ul.onmouseout = (event) => {
 };
 
 
+const checkForWinner = function() {
+  playCounter++;
+  const winCombinations = [
+    showWinner(getClass(1), getClass(2), getClass(3)),
+    showWinner(getClass(4), getClass(5), getClass(6)),
+    showWinner(getClass(7), getClass(8), getClass(9)),
+    showWinner(getClass(1), getClass(4), getClass(7)),
+    showWinner(getClass(2), getClass(5), getClass(8)),
+    showWinner(getClass(3), getClass(6), getClass(9)),
+    showWinner(getClass(1), getClass(5), getClass(9)),
+    showWinner(getClass(3), getClass(5), getClass(7)),
+  ];
 
-let size = 3;
+  let winner = false;
+  winCombinations.forEach(function(winCombo) {
+    if (playCounter === 9) {
+      winner = "draw";
+    }
+    if (winCombo) {
+      winner = winCombo;
+    }
 
+  });
+  return winner;
 
-function calculate() {
-  let isWin = checkForWinner();
-  if (isWin) {
+}
+
+const getClass = function(boxNumber) {
+  let boxNum = $(".box").eq(boxNumber - 1).attr("class").split(" ")[1];
+  return boxNum;
+}
+
+const showWinner = function(box1, box2, box3) {
+  if ((box1 === box2) && (box2 === box3)) {
+    return box1;
+  } else {
+    return false;
+  }
+}
+
+const gameOver = function(winningPlayer) {
+  switch (winningPlayer) {
+    case "box-filled-1" :
     board.style.display = "none";
     win.style.display = "";
+    $("#finish").addClass("screen-win-one");
+    $(".message").text("WINNER");
+    break;
+
+    case "box-filled-2" :
+    board.style.display = "none";
+    win.style.display = "";
+    $("#finish").addClass("screen-win-two");
+    $(".message").text("WINNER");
+    break;
+
+    case "draw" :
+    board.style.display = "none";
+    win.style.display = "";
+    $("#finish").addClass("screen-win-tie");
+    $(".message").text("It's a draw");
+    break;
+
+    default:
+    break;
   }
 }
 
-function checkForWinner() {
-  let win = false;
-  let playerSelections = [];
-
-  if (playerOne.classList.contains("active")) {
-    playerSelections = playerOneMoves;
-  } else {
-    playerSelections = playerTwoMoves;
-  }
-  if (playerSelections.length === size) {
-    for (let i = 0; i < winCombinations.length; i++) {
-      let sets = winCombinations[i];
-      let setFound = true;
-    }
-    for (let j = 0; j < sets.length; j++) {
-      let found = false;
-    }
-    for (let k = 0; k < playerSelections.length; k++) {
-      if (sets[j] === playerSelections[k]) {
-        found = true;
-        break;
-      }
-    }
-    if (setFound == true) {
-      win = true;
-      break;
-    }
-  }
-  return win;
+const resetBoard = function() {
+  playCounter = 0;
+  win.style.display = "none";
+  start.style.display = "";
+  $("#player1name").focus();
+  $(".boxes li").removeClass("box-filled-1 disabled");
+  $(".boxes li").removeClass("box-filled-2 disabled");
+  $(".boxes li").css("background-image", "none");
+  $("#finish").removeClass("screen-win-one");
+  $("#finish").removeClass("screen-win-two");
+  $("#finish").removeClass("screen-win-tie");
 }
 
+$(".button:contains('New game')").on("click", resetBoard);
 
 } ();

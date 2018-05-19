@@ -3,7 +3,6 @@
   // HTML variables
   const start = document.getElementById("start");
   const board = document.getElementById("board");
-  const title = document.getElementById("tictactoe");
   const win = document.getElementById("finish");
   const startButton = document.querySelector(".button");
   const playerOne = document.getElementById("player1");
@@ -12,17 +11,18 @@
   let boxes = document.querySelectorAll(".box");
   let playCounter = 0;
 
+
   // hide game board and show start screen
-  board.style.display = "none";
-  win.style.display = "none";
+    board.style.display = "none";
+    win.style.display = "none";
 
   // user input
   $("#player1name").focus();
 
   function getName() {
     let inputValue = document.getElementById("player1name").value;
-    $("#player1").append(inputValue);
-    $("#player2").append("Player Two");
+    $("#player1").prepend(inputValue);
+    $("#player2").prepend("Player Two");
   }
 
   // when the start button is clicked, display the game board and player one's name
@@ -31,18 +31,18 @@
     start.style.display = "none";
     getName();
   // automatically set first player to O
-    playerOne.className += " active";
+    playerOne.className = "players active";
   }
 
   // players trade turns
   // each time a square is clicked, it becomes disabled
 function takeTurn(event) {
-  if (playerOne.classList.contains("active") && event.target.className === "box") {
+  if (playerOne.classList.contains("active")) {
     playerTwo.classList.add("active");
     playerOne.classList.remove("active");
     event.target.classList.add("box-filled-1");
     event.target.classList.add("disabled");
-  } else  if (playerTwo.classList.contains("active")) {
+  } else if (playerTwo.classList.contains("active")) {
     playerOne.classList.add("active");
     playerTwo.classList.remove("active");
     event.target.classList.add("box-filled-2");
@@ -155,6 +155,10 @@ const resetBoard = function() {
   win.style.display = "none";
   start.style.display = "";
   $("#player1name").focus();
+  $("#player1name").val("");
+  playerTwo.className = "players";
+  // $("#player1").text("");
+  // $("#player2").text("");
   $(".boxes li").removeClass("box-filled-1 disabled");
   $(".boxes li").removeClass("box-filled-2 disabled");
   $(".boxes li").css("background-image", "none");

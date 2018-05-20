@@ -10,7 +10,7 @@
   const ul = document.querySelector(".boxes");
   let boxes = document.querySelectorAll(".box");
   let playCounter = 0;
-
+  let boxNumber;
 
   // hide game board and show start screen
     board.style.display = "none";
@@ -21,8 +21,8 @@
 
   function getName() {
     let inputValue = document.getElementById("player1name").value;
-    $("#player1").prepend(inputValue);
-    $("#player2").prepend("Player Two");
+    $("#player1").prepend(inputValue).css("color", "black");
+    $("#player2").prepend("Player Two").css("color", "black");
   }
 
   // when the start button is clicked, display the game board and player one's name
@@ -36,23 +36,72 @@
 
   // players trade turns
   // each time a square is clicked, it becomes disabled
-function takeTurn(event) {
-  if (playerOne.classList.contains("active")) {
-    playerTwo.classList.add("active");
-    playerOne.classList.remove("active");
+  // replace this function with the one below on line 67?
+// function takeTurn(event) {
+//   if (playerOne.classList.contains("active")) {
+//     playerTwo.classList.add("active");
+//     playerOne.classList.remove("active");
+//     event.target.classList.add("box-filled-1");
+//     event.target.classList.add("disabled");
+//   } else if (playerTwo.classList.contains("active")) {
+//     playerOne.classList.add("active");
+//     playerTwo.classList.remove("active");
+//     event.target.classList.add("box-filled-2");
+//     event.target.classList.add("disabled");
+//   }
+// }
+
+
+
+
+
+
+
+
+
+// trying different strategy for player turns:
+// one function for human player (player one) and a separate function to control
+// the computer's moves
+
+
+function playerOneMoves(event) {
+  if (playerOne.classList.contains("active") && event.target.className === "box") {
     event.target.classList.add("box-filled-1");
     event.target.classList.add("disabled");
-  } else if (playerTwo.classList.contains("active")) {
+    playerTwo.classList.add("active");
+    playerOne.classList.remove("active");
+  }
+
+}
+
+let computerMoves =  function(event) {
+  do {
+    boxNumber = Math.floor(Math.random() * 9);
+    console.log(boxNumber);
+  } while ((playerTwo.classList.contains("active") && boxes[boxNumber].className !== "box"));
+  if (playerTwo.classList.contains("active") && boxes[boxNumber] === "box") {
+    box[boxNumber].classList.add("box-filled-2");
+    box[boxNumber].classList.add("disabled");
     playerOne.classList.add("active");
     playerTwo.classList.remove("active");
-    event.target.classList.add("box-filled-2");
-    event.target.classList.add("disabled");
+  }
+
+}
+
+
+
+ul.onclick = (event) => {
+  playerOneMoves(event);
+
+  if (checkForWinner !== true && board.style.display !== "none" ) {
+  computerMoves(event);
   }
 }
 
-$(".boxes").on("click", takeTurn);
+// old click handler - keep or toss?
+// $(".boxes").on("click", takeTurn);
 
-//another click handler?
+//another click handler? put into the ul.onclick function on line 88?
 $(".boxes").on("click", function() {
   let gameWon = checkForWinner();
   gameOver(gameWon);
@@ -150,23 +199,32 @@ const gameOver = function(winningPlayer) {
   }
 }
 
-const resetBoard = function() {
-  playCounter = 0;
-  win.style.display = "none";
-  start.style.display = "";
-  $("#player1name").focus();
-  $("#player1name").val("");
-  playerTwo.className = "players";
-  // $("#player1").text("");
-  // $("#player2").text("");
-  $(".boxes li").removeClass("box-filled-1 disabled");
-  $(".boxes li").removeClass("box-filled-2 disabled");
-  $(".boxes li").css("background-image", "none");
-  $("#finish").removeClass("screen-win-one");
-  $("#finish").removeClass("screen-win-two");
-  $("#finish").removeClass("screen-win-tie");
-}
+// const resetBoard = function() {
+//   playCounter = 0;
+//   win.style.display = "none";
+//   start.style.display = "";
+//   $("#player1name").focus();
+//   $("#player1name").val("");
+//   playerTwo.className = "players";
+//   // $("#player1").text("");
+//   // $("#player2").text("");
+//   $(".boxes li").removeClass("box-filled-1 disabled");
+//   $(".boxes li").removeClass("box-filled-2 disabled");
+//   $(".boxes li").css("background-image", "none");
+//   $("#finish").removeClass("screen-win-one");
+//   $("#finish").removeClass("screen-win-two");
+//   $("#finish").removeClass("screen-win-tie");
+// }
+//
+// $(".button:contains('New game')").on("click", resetBoard);
 
-$(".button:contains('New game')").on("click", resetBoard);
+
+// better way to reset the board?
+
+$(".button:contains('New game')").on("click", function() {
+  window.location.reload(true);
+});
+
+
 
 } ();

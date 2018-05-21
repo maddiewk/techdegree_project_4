@@ -121,7 +121,7 @@ const checkForWinner = function() {
 
   let winner = false;
   winCombinations.forEach(function(winCombo) {
-    if (playCounter === 9 && !showWinner) {
+    if (playCounter === 9 && showWinner !== true) {
       winner = "draw";
     }
     if (winCombo) {

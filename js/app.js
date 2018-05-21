@@ -1,4 +1,3 @@
-
 !function () {
   // HTML variables
   const start = document.getElementById("start");
@@ -9,7 +8,9 @@
   const playerTwo = document.getElementById("player2");
   const ul = document.querySelector(".boxes");
   let boxes = document.querySelectorAll(".box");
+  // keep track of moves made during the game
   let playCounter = 0;
+  // variable to hold index number of each square
   let boxNumber;
 
   // hide game board and show start screen
@@ -22,8 +23,8 @@
   // when the start button is clicked, display the game board and player one's name
   startButton.onclick = function(event) {
     let inputValue = document.getElementById("player1name").value;
-    
-    // if no name is entered, prevent player from going on
+
+    // if no name is entered, prevent game page from loading
     if (inputValue === "") {
       $("#player1name").css("border-color", "red");
       return false;
@@ -43,6 +44,8 @@ function playerOneMoves(event) {
   if (playerOne.classList.contains("active") && event.target.className === "box") {
     event.target.classList.add("box-filled-1");
     event.target.classList.add("disabled");
+
+    // switch to player two
     playerTwo.classList.add("active");
     playerOne.classList.remove("active");
   }
@@ -52,20 +55,21 @@ function playerOneMoves(event) {
 }
 
 // function to control computer play
-let computerMoves =  function() {
+let computerMoves = function() {
   do {
     boxNumber = Math.floor(Math.random() * 9);
   } while ((playerTwo.classList.contains("active") && boxes[boxNumber].className !== "box") && showWinner !== true);
   if (playerTwo.classList.contains("active") && boxes[boxNumber].className === "box") {
     boxes[boxNumber].classList.add("box-filled-2");
     boxes[boxNumber].classList.add("disabled");
+
+    // switch to player one
     playerOne.classList.add("active");
     playerTwo.classList.remove("active");
   }
   // after each turn, check to see if there is a win
   let gameWon = checkForWinner();
   gameOver(gameWon);
-
 }
 
 // attach click event to each square
@@ -74,7 +78,7 @@ ul.onclick = (event) => {
   playerOneMoves(event);
 
   if (checkForWinner !== true && board.style.display !== "none" ) {
-    setTimeout(computerMoves, 1000);
+    setTimeout(computerMoves, 1500);
   }
 }
 
@@ -126,7 +130,6 @@ const checkForWinner = function() {
 
   });
   return winner;
-
 }
 
 // get the class name of each square

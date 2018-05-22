@@ -45,31 +45,35 @@ function playerOneMoves(event) {
     event.target.classList.add("box-filled-1");
     event.target.classList.add("disabled");
 
+    // after each turn, check to see if there is a win
+    let gameWon = checkForWinner();
+    gameOver(gameWon);
+
     // switch to player two
+    if (!gameWon) {
     playerTwo.classList.add("active");
     playerOne.classList.remove("active");
+    }
   }
-  // after each turn, check to see if there is a win
-  let gameWon = checkForWinner();
-  gameOver(gameWon);
 }
 
 // function to control computer play
 let computerMoves = function() {
   do {
     boxNumber = Math.floor(Math.random() * 9);
-  } while ((playerTwo.classList.contains("active") && boxes[boxNumber].className !== "box") && showWinner !== true);
+  } while ((playerTwo.classList.contains("active") && boxes[boxNumber].className !== "box"));
   if (playerTwo.classList.contains("active") && boxes[boxNumber].className === "box") {
     boxes[boxNumber].classList.add("box-filled-2");
     boxes[boxNumber].classList.add("disabled");
+
+    // after each turn, check to see if there is a win
+    let gameWon = checkForWinner();
+    gameOver(gameWon);
 
     // switch to player one
     playerOne.classList.add("active");
     playerTwo.classList.remove("active");
   }
-  // after each turn, check to see if there is a win
-  let gameWon = checkForWinner();
-  gameOver(gameWon);
 }
 
 // attach click event to each square
@@ -77,10 +81,12 @@ let computerMoves = function() {
 ul.onclick = (event) => {
   playerOneMoves(event);
 
-  if (checkForWinner !== true && board.style.display !== "none" ) {
+  // let gameWon = checkForWinner();
+  // gameOver(gameWon);
+  if (checkForWinner !== true && board.style.display !== "none") {
     setTimeout(computerMoves, 1500);
   }
-}
+};
 
   // highlight current player's symbol when mouse hovers over squares
 ul.onmouseover = (event) => {
@@ -89,8 +95,6 @@ ul.onmouseover = (event) => {
   }
   if (playerOne.className === "players active") {
     event.target.style.backgroundImage = 'url("./img/o.svg")';
-  } else {
-    event.target.style.backgroundImage = 'url("./img/x.svg")';
   }
 };
 
@@ -99,8 +103,6 @@ ul.onmouseout = (event) => {
     return;
   }
   if (playerOne.className === "players active") {
-    event.target.style.backgroundImage = "";
-  } else {
     event.target.style.backgroundImage = "";
   }
 };
@@ -116,26 +118,24 @@ const checkForWinner = function() {
     showWinner(getClass(2), getClass(5), getClass(8)),
     showWinner(getClass(3), getClass(6), getClass(9)),
     showWinner(getClass(1), getClass(5), getClass(9)),
-    showWinner(getClass(3), getClass(5), getClass(7)),
+    showWinner(getClass(3), getClass(5), getClass(7))
   ];
 
   let winner = false;
   winCombinations.forEach(function(winCombo) {
-    if (playCounter === 9 && showWinner !== true) {
+    if (winCombo) {
+   winner = winCombo;
+ }
+    else if (playCounter === 9 && !winCombo) {
       winner = "draw";
     }
-    if (winCombo) {
-      winner = winCombo;
-    }
-
   });
   return winner;
 }
 
 // get the class name of each square
 const getClass = function(boxNumber) {
-  let boxNum = $(".box").eq(boxNumber - 1).attr("class").split(" ")[1];
-  return boxNum;
+  return $(".box").eq(boxNumber - 1).attr("class").split(" ")[1];
 }
 
 // check to see if any 3 squares are the same
@@ -150,21 +150,22 @@ const showWinner = function(box1, box2, box3) {
 // use switch function to check for win, lose, or draw
 const gameOver = function(winningPlayer) {
   switch (winningPlayer) {
-    case "box-filled-1" :
+
+    case "box-filled-1":
     board.style.display = "none";
     win.style.display = "";
     $("#finish").addClass("screen-win-one");
     $(".message").text(`${$('#player1name').val()} is the winner!`);
     break;
 
-    case "box-filled-2" :
+    case "box-filled-2":
     board.style.display = "none";
     win.style.display = "";
     $("#finish").addClass("screen-win-two");
     $(".message").text("WINNER");
     break;
 
-    case "draw" :
+    case "draw":
     board.style.display = "none";
     win.style.display = "";
     $("#finish").addClass("screen-win-tie");
@@ -181,4 +182,4 @@ const gameOver = function(winningPlayer) {
     window.location.reload(true);
   });
 
-}();
+} ();

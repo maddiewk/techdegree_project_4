@@ -77,7 +77,7 @@ function playerOneMoves(event) {
 // function to control computer play
 let computerMoves = function() {
   do {
-    // get random number and assign as index number
+    // gets random index number
     boxNumber = Math.floor(Math.random() * 9);
   } while ((playerTwo.classList.contains("active") && boxes[boxNumber].className !== "box") && (showWinner(winCombinations, player1Selections)) !== true);
 
@@ -86,9 +86,8 @@ let computerMoves = function() {
     boxes[boxNumber].classList.add("disabled");
 
     player2Selections.push(boxes[boxNumber]);
-    // playCounter++;
 
-    // after each turn, check to see if there is a win
+    // after each turn, check to see if there is a win or tie
     gameOver(playerOne, player2Selections);
     noWinner(player2Selections);
 
@@ -122,7 +121,7 @@ const gameOver = function(player, playerMoves) {
   }
 }
 
-// check for a tie
+// function to check for a tie
 const noWinner = function(playerMoves) {
   if ((playerMoves.length === 5) && (board.style.display === "")) {
       board.style.display = "none";

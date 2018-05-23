@@ -123,8 +123,8 @@ const gameOver = function(player, playerMoves) {
 }
 
 // check for a tie
-const noWinner = function(playerSelections) {
-  if ((playerSelections.length === 5) && (board.style.display === "")) {
+const noWinner = function(playerMoves) {
+  if ((playerMoves.length === 5) && (board.style.display === "")) {
       board.style.display = "none";
       win.style.display = "";
       $("#finish").addClass("screen-win-tie");
